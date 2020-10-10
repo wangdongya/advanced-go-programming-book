@@ -269,10 +269,10 @@ func (a *Authentication) Auth(ctx context.Context) error {
 	var appid string
 	var appkey string
 
-	if val, ok := md["login"]; ok { appid = val[0] }
+	if val, ok := md["user"]; ok { appid = val[0] }
 	if val, ok := md["password"]; ok { appkey = val[0] }
 
-	if appid != a.Login || appkey != a.Password {
+	if appid != a.User || appkey != a.Password {
 		return grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 
@@ -293,7 +293,7 @@ func filter(ctx context.Context,
 	req interface{}, info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
 ) (resp interface{}, err error) {
-	log.Println("fileter:", info)
+	log.Println("filter:", info)
 	return handler(ctx, req)
 }
 ```
@@ -318,7 +318,7 @@ func filter(
 	info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
 ) (resp interface{}, err error) {
-	log.Println("fileter:", info)
+	log.Println("filter:", info)
 
 	defer func() {
 		if r := recover(); r != nil {
